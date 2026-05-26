@@ -67,7 +67,7 @@ return useQuery({
         ...s,
         certifications: Array.isArray(s.certifications)
           ? s.certifications
-          : typeof s.certifications === "string"
+          : typeof s.certifications === "string" && s.certifications.length > 0
           ? s.certifications.split(",").map((c: string) => c.trim()).filter(Boolean)
           : [],
       })) as Supplier[];
