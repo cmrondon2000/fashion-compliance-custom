@@ -140,15 +140,24 @@ export function useUpdateProduct() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...patch }: Partial<Product> & { id: string }) => {
-      // Re-validate using the (possibly updated) supplier + material.
       const { data: existing } = await supabase
         .from("products").select("supplier,material").eq("id", id).maybeSingle();
       const supplierName = patch.supplier ?? existing?.supplier ?? "";
       const material = patch.material ?? existing?.material ?? "";
-      const { data: supplier } = await supabase
+      const { data: supplierData } = await supabase
         .from("suppliers").select("status,certifications,name")
         .eq("name", supplierName).maybeSingle();
-      const { status } = validateProduct({ material }, supplier ?? undefined);
+      
+      const supplier = supplierData ? {
+        ...supplierData,
+        certifications: Array.isArray(supplierData.certifications)
+          ? supplierData.certifications
+          : typeof supplierData.certifications === "string" && supplierData.certifications.length > 0
+          ? supplierData.certifications.split(",").map((c: string) => c.trim()).filter(Boolean)
+          : [],
+      } : undefined;
+
+      const { status } = validateProduct({ material }, supplier);
       const { error } = await supabase
         .from("products").update({ ...patch, status }).eq("id", id);
       if (error) throw error;
@@ -156,6 +165,7 @@ export function useUpdateProduct() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["products"] }),
   });
 }
+
 
 export function useUpdateSupplier() {
   const qc = useQueryClient();
