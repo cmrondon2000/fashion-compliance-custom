@@ -55,7 +55,7 @@ export function useProducts() {
 }
 
 export function useSuppliers() {
-  return useQuery({
+return useQuery({
     queryKey: ["suppliers"],
     queryFn: async (): Promise<Supplier[]> => {
       const { data, error } = await supabase
@@ -63,11 +63,17 @@ export function useSuppliers() {
         .select("*")
         .order("updated_at", { ascending: false });
       if (error) throw error;
-      return data as Supplier[];
+      return (data as any[]).map((s) => ({
+        ...s,
+        certifications: Array.isArray(s.certifications)
+          ? s.certifications
+          : typeof s.certifications === "string"
+          ? s.certifications.split(",").map((c: string) => c.trim()).filter(Boolean)
+          : [],
+      })) as Supplier[];
     },
   });
 }
-
 
 export function useAddProduct() {
   const qc = useQueryClient();
