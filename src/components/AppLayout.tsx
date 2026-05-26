@@ -1,4 +1,4 @@
-import { Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, Package, Truck, Sparkles, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -10,12 +10,12 @@ const nav = [
 ] as const;
 
 export function AppLayout({ children }: { children?: React.ReactNode }) {
-  const path = useRouterState({ select: (s) => s.location.pathname });
+  const location = useLocation();
+  const path = location.pathname;
   const [open, setOpen] = useState(false);
 
   return (
     <div className="min-h-screen flex w-full bg-background">
-      {/* Sidebar */}
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-40 w-64 flex flex-col transition-transform md:translate-x-0",
@@ -25,13 +25,11 @@ export function AppLayout({ children }: { children?: React.ReactNode }) {
           open ? "translate-x-0" : "-translate-x-full",
         )}
       >
-        {/* ambient glow */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute -top-24 -left-16 h-64 w-64 rounded-full bg-indigo-500/20 blur-3xl" />
           <div className="absolute bottom-0 -right-20 h-72 w-72 rounded-full bg-fuchsia-500/10 blur-3xl" />
         </div>
 
-        {/* Brand */}
         <div className="relative h-16 flex items-center gap-3 px-5 border-b border-white/5">
           <div className="relative h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-400 via-violet-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-violet-500/30 ring-1 ring-white/20">
             <Sparkles className="h-4 w-4 text-white drop-shadow" />
@@ -43,7 +41,6 @@ export function AppLayout({ children }: { children?: React.ReactNode }) {
           </div>
         </div>
 
-        {/* Nav */}
         <nav className="relative flex-1 p-3 space-y-1">
           <div className="px-3 pt-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
             Workspace
@@ -67,19 +64,13 @@ export function AppLayout({ children }: { children?: React.ReactNode }) {
                 {active && (
                   <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full bg-gradient-to-b from-indigo-400 to-fuchsia-500 shadow-[0_0_12px_rgba(168,85,247,0.6)]" />
                 )}
-                <Icon
-                  className={cn(
-                    "h-4 w-4 transition-transform duration-200",
-                    active ? "text-white" : "text-slate-500 group-hover:text-slate-200 group-hover:scale-110",
-                  )}
-                />
+                <Icon className={cn("h-4 w-4 transition-transform duration-200", active ? "text-white" : "text-slate-500 group-hover:text-slate-200 group-hover:scale-110")} />
                 <span className="tracking-tight">{item.label}</span>
               </Link>
             );
           })}
         </nav>
 
-        {/* Footer card */}
         <div className="relative p-3">
           <div className="rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-md p-3 shadow-inner">
             <div className="flex items-center gap-2.5">
@@ -94,19 +85,12 @@ export function AppLayout({ children }: { children?: React.ReactNode }) {
       </aside>
 
       {open && (
-        <div
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden"
-          onClick={() => setOpen(false)}
-        />
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden" onClick={() => setOpen(false)} />
       )}
 
       <div className="flex-1 md:ml-64 flex flex-col min-w-0">
         <header className="h-16 border-b border-border bg-card/50 backdrop-blur flex items-center px-4 md:px-8 sticky top-0 z-20">
-          <button
-            className="md:hidden mr-3 p-2 rounded-md hover:bg-accent"
-            onClick={() => setOpen(true)}
-            aria-label="Open menu"
-          >
+          <button className="md:hidden mr-3 p-2 rounded-md hover:bg-accent" onClick={() => setOpen(true)} aria-label="Open menu">
             <Menu className="h-5 w-5" />
           </button>
           <div className="text-sm text-muted-foreground">
@@ -117,7 +101,7 @@ export function AppLayout({ children }: { children?: React.ReactNode }) {
           </div>
         </header>
         <main className="flex-1 p-4 md:p-8">
-          {children ?? <Outlet />}
+          {children}
         </main>
       </div>
     </div>
