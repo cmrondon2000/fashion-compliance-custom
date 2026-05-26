@@ -15,7 +15,7 @@ export function AppLayout({ children }: { children?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex w-full bg-background">
+    <div className="min-h-screen flex w-full bg-slate-950 text-slate-100">
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-40 w-64 flex flex-col transition-transform md:translate-x-0",
