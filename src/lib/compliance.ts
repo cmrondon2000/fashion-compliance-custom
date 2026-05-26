@@ -82,10 +82,7 @@ export function validateProduct(
         }
       }
     }
-    if (!matchedRule && supplier?.status === "compliant") {
-      issues.push("Unrecognized fiber — manual review recommended");
-      bump("review");
-    }
+
   }
 
   return { status: worst, issues };
