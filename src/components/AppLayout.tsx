@@ -89,7 +89,7 @@ export function AppLayout({ children }: { children?: React.ReactNode }) {
       )}
 
       <div className="flex-1 md:ml-64 flex flex-col min-w-0">
-        <header className="h-16 border-b border-border bg-card/50 backdrop-blur flex items-center px-4 md:px-8 sticky top-0 z-20">
+        <header className="sticky top-0 z-20 h-16 border-b border-white/10 bg-white/70 backdrop-blur-2xl supports-[backdrop-filter]:bg-white/60 flex items-center px-4 md:px-8 shadow-[0_4px_24px_-12px_rgba(15,23,42,0.08)]" >
           <button className="md:hidden mr-3 p-2 rounded-md hover:bg-accent" onClick={() => setOpen(true)} aria-label="Open menu">
             <Menu className="h-5 w-5" />
           </button>
@@ -100,7 +100,7 @@ export function AppLayout({ children }: { children?: React.ReactNode }) {
             <div className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-400 via-violet-500 to-fuchsia-500 ring-2 ring-white/30 shadow-md" />
           </div>
         </header>
-        <main className="flex-1 p-4 md:p-8">
+        <main className="flex-1 p-6 md:p-10 max-w-7xl w-full mx-auto">
           {children}
         </main>
       </div>
