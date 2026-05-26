@@ -134,7 +134,8 @@ export default function DashboardPage() {
         <div className="absolute top-1/4 -right-20 h-[24rem] w-[24rem] rounded-full bg-fuchsia-400/15 blur-[120px]" />
         <div className="absolute bottom-0 left-0 h-[22rem] w-[22rem] rounded-full bg-cyan-400/10 blur-[120px]" />
       </div>
-      <div className="space-y-8 max-w-7xl mx-auto animate-fade-in">
+      <div className="relative space-y-8 max-w-7xl mx-auto animate-fade-in">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-indigo-500/5 via-transparent to-fuchsia-500/5 blur-3xl" />
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-white/60 dark:bg-white/5 backdrop-blur px-3 py-1 text-[11px] font-medium text-muted-foreground">
