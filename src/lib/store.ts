@@ -79,18 +79,29 @@ export function useAddProduct() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (p: Omit<Product, "id" | "updated_at">) => {
-      const { data: suppliers } = await supabase
+      const { data: supplierData } = await supabase
         .from("suppliers")
         .select("status,certifications,name")
         .eq("name", p.supplier)
         .maybeSingle();
-      const { status } = validateProduct(p, suppliers ?? undefined);
+      
+      const supplier = supplierData ? {
+        ...supplierData,
+        certifications: Array.isArray(supplierData.certifications)
+          ? supplierData.certifications
+          : typeof supplierData.certifications === "string" && supplierData.certifications.length > 0
+          ? supplierData.certifications.split(",").map((c: string) => c.trim()).filter(Boolean)
+          : [],
+      } : undefined;
+
+      const { status } = validateProduct(p, supplier);
       const { error } = await supabase.from("products").insert({ ...p, status });
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["products"] }),
   });
 }
+
 
 export function useAddSupplier() {
   const qc = useQueryClient();
